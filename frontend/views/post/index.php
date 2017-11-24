@@ -8,6 +8,7 @@ use frontend\components\RctReplyWidget;
 use common\models\Post;
 use yii\caching\DbDependency;
 use yii\caching\yii\caching;
+use kartik\datetime\DateTimePicker;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\PostSearch */
