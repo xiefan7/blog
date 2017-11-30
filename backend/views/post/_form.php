@@ -51,7 +51,14 @@ use common\models\Adminuser;
 
 	
 	?>
-    
+	<?= $form->field($model,'category_id')
+		->dropDownList(\common\models\Category::find()
+			->select(['name','id'])
+			->indexBy('id')
+			->column(),
+			['prompt'=>'请选择分类']);?>
+
+
     <?= $form->field($model,'status')
          ->dropDownList(Poststatus::find()
 						->select(['name','id'])

@@ -8,7 +8,7 @@ use frontend\components\RctReplyWidget;
 use common\models\Post;
 use yii\caching\DbDependency;
 use yii\caching\yii\caching;
-use kartik\datetime\DateTimePicker;
+
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\PostSearch */
@@ -16,6 +16,7 @@ use kartik\datetime\DateTimePicker;
 
 ?>
 
+<script src="/js/layer/layer.js"></script>
 <div class="container">
 
 	<div class="row">
@@ -42,8 +43,9 @@ use kartik\datetime\DateTimePicker;
 		
 		</div>
 
-		
+
 		<div class="col-md-3">
+
 			<embed align="middle" width="230" height="86" title="Adobe Flash Player" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" allowscriptaccess="always" name="honehoneclock" bgcolor="#ffffff" quality="high" src="http://chabudai.sakura.ne.jp/blogparts/honehoneclock/honehone_clock_wh.swf" wmode="transparent">
 			<div class="searchbox">
 				<ul class="list-group">

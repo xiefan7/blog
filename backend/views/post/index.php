@@ -50,6 +50,14 @@ $this->params['breadcrumbs'][] = $this->title;
             		->indexBy('id')
             		->column(),
    			 ],
+            ['attribute'=>'category_id',
+                'label'=>'分类',
+                'value'=>'category.name',
+                'filter'=>\common\models\Category::find()
+                    ->select(['name','id'])
+                    ->indexBy('id')
+                    ->column(),
+            ],
             // 'create_time:datetime',
              //'update_time:datetime',
              ['attribute'=>'update_time',

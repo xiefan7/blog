@@ -9,6 +9,7 @@ use yii\helpers\Html;
  * This is the model class for table "post".
  *
  * @property integer $id
+ * @property integer $category_id
  * @property string $title
  * @property string $content
  * @property string $tags
@@ -19,12 +20,11 @@ use yii\helpers\Html;
  *
  * @property Comment[] $comments
  * @property Adminuser $author
+ * @property Category $category
  * @property Poststatus $status0
  */
 class Post extends \yii\db\ActiveRecord
 {
-	private $_oldTags;
-	
     /**
      * @inheritdoc
      */
@@ -39,11 +39,12 @@ class Post extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'content', 'status', 'author_id'], 'required'],
+            [['category_id', 'title', 'content', 'status', 'author_id'], 'required'],
+            [['category_id', 'status', 'create_time', 'update_time', 'author_id'], 'integer'],
             [['content', 'tags'], 'string'],
-            [['status', 'create_time', 'update_time', 'author_id'], 'integer'],
             [['title'], 'string', 'max' => 128],
             [['author_id'], 'exist', 'skipOnError' => true, 'targetClass' => Adminuser::className(), 'targetAttribute' => ['author_id' => 'id']],
+            [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['category_id' => 'id']],
             [['status'], 'exist', 'skipOnError' => true, 'targetClass' => Poststatus::className(), 'targetAttribute' => ['status' => 'id']],
         ];
     }
@@ -55,13 +56,14 @@ class Post extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'title' => '标题',
-            'content' => '内容',
-            'tags' => '标签',
-            'status' => '状态',
-            'create_time' => '创建时间',
-            'update_time' => '修改时间',
-            'author_id' => '作者',
+            'category_id' => 'Category ID',
+            'title' => 'Title',
+            'content' => 'Content',
+            'tags' => 'Tags',
+            'status' => 'Status',
+            'create_time' => 'Create Time',
+            'update_time' => 'Update Time',
+            'author_id' => 'Author ID',
         ];
     }
 
@@ -70,21 +72,23 @@ class Post extends \yii\db\ActiveRecord
      */
     public function getComments()
     {
-        return $this->hasMany(Comment::className(), ['post_id' => 'id']);
+        return $this->hasMany(Comment::className(), ['post_id' => 'id'])->inverseOf('post');
     }
 
-    public function getActiveComments()
-    {
-    	return $this->hasMany(Comment::className(), ['post_id' => 'id'])
-    	->where('status=:status',[':status'=>2])->orderBy('id DESC');
-    }
-    
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getAuthor()
     {
-        return $this->hasOne(Adminuser::className(), ['id' => 'author_id']);
+        return $this->hasOne(Adminuser::className(), ['id' => 'author_id'])->inverseOf('posts');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCategory()
+    {
+        return $this->hasOne(Category::className(), ['id' => 'category_id'])->inverseOf('posts');
     }
 
     /**
@@ -92,9 +96,11 @@ class Post extends \yii\db\ActiveRecord
      */
     public function getStatus0()
     {
-        return $this->hasOne(Poststatus::className(), ['id' => 'status']);
+        return $this->hasOne(Poststatus::className(), ['id' => 'status'])->inverseOf('posts');
     }
-    
+
+    private $_oldTags;
+
     public function beforeSave($insert)
     {
     	if(parent::beforeSave($insert))

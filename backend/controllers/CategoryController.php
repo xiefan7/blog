@@ -2,18 +2,18 @@
 
 namespace backend\controllers;
 
-use Yii;
 use common\models\Post;
-use common\models\PostSearch;
+use Yii;
+use common\models\Category;
+use common\models\CategorySearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
 
 /**
- * PostController implements the CRUD actions for Post model.
+ * CategoryController implements the CRUD actions for Category model.
  */
-class PostController extends Controller
+class CategoryController extends Controller
 {
     /**
      * @inheritdoc
@@ -26,35 +26,19 @@ class PostController extends Controller
                 'actions' => [
                     'delete' => ['POST'],
                 ],
-            ],  
-
-        	'access' =>[
-        				'class' => AccessControl::className(),
-        				'rules' =>
-        				[
-        						[
-        								'actions' => ['index', 'view'],
-        								'allow' => true,
-        								'roles' => ['?'],
-        						],
-        				[
-        				'actions' => ['view', 'index', 'create','update','delete'],
-        				'allow' => true,
-        				'roles' => ['@'],
-        			],
-        		],
-        		],        		
+            ],
         ];
     }
 
     /**
-     * Lists all Post models.
+     * Lists all Category models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new PostSearch();
+        $searchModel = new CategorySearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -62,7 +46,7 @@ class PostController extends Controller
     }
 
     /**
-     * Displays a single Post model.
+     * Displays a single Category model.
      * @param integer $id
      * @return mixed
      */
@@ -74,14 +58,13 @@ class PostController extends Controller
     }
 
     /**
-     * Creates a new Post model.
+     * Creates a new Category model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Post();
-
+        $model = new Category();
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
@@ -92,7 +75,7 @@ class PostController extends Controller
     }
 
     /**
-     * Updates an existing Post model.
+     * Updates an existing Category model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -111,28 +94,35 @@ class PostController extends Controller
     }
 
     /**
-     * Deletes an existing Post model.
+     * Deletes an existing Category model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $category_post=Post::find()->where(['category_id'=>$id])->one();
 
-        return $this->redirect(['index']);
+        if(!empty($category_post)){
+            $error='该分类下还存在文章请先删除文章';
+            Yii::$app->user->setFlash("danger","该分类下还存在文章请先删除文章");
+        }else{
+            //$this->findModel($id)->delete();
+
+            return $this->redirect(['index']);
+        }
     }
 
     /**
-     * Finds the Post model based on its primary key value.
+     * Finds the Category model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Post the loaded model
+     * @return Category the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Post::findOne($id)) !== null) {
+        if (($model = Category::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

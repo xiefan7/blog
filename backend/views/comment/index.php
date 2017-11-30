@@ -12,6 +12,7 @@ use yii\grid\Column;
 $this->title = '评论管理';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
 <div class="comment-index">
 
     <h1><?= Html::encode($this->title) ?></h1>

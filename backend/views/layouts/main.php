@@ -25,11 +25,12 @@ AppAsset::register($this);
 </head>
 <body>
 <?php $this->beginBody() ?>
-
+<script src='<?=Yii::$app->homeUrl?>/js/jquery-3.2.1/jquery-3.2.1.js'></script>
+<script src="<?=Yii::$app->homeUrl?>/js/layer/layer.js"></script>
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => 'BlogDemo 2',
+        'brandLabel' => 'MyBlog',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
@@ -39,6 +40,7 @@ AppAsset::register($this);
     		['label' => '文章管理', 'url' => ['/post/index']],
     		['label' => '评论管理', 'url' => ['/comment/index']],
     		'<li><span class="badge">'.Comment::getPengdingCommentCount().'</span></li>',
+            ['label' => '分类管理', 'url' => ['/category/index']],
     		['label' => '用户管理', 'url' => ['/user/index']],
     		['label' => '管理员', 'url' => ['/adminuser/index']],
     ];
@@ -66,6 +68,7 @@ AppAsset::register($this);
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>
         <?= Alert::widget() ?>
+        <input type="text" value="<?= Yii::$app->request->baseUrl ;?>">
         <?= $content ?>
     </div>
 </div>

@@ -9,11 +9,15 @@ use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 use common\widgets\Alert;
+use \common\models\Category;
+
 
 AppAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
+<script src='/js/jquery-3.2.1/jquery-3.2.1.js'></script>
+<script src="/js/layer/layer.js"></script>
 <html lang="<?= Yii::$app->language ?>">
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
@@ -35,8 +39,12 @@ AppAsset::register($this);
             'class' => 'navbar-inverse navbar-fixed-top navbar',
         ],
     ]);
+    $menuItem=[
+        ['label' => '<span class="glyphicon glyphicon-book f60" aria-hidden="true"></span>&nbsp;全部', 'url' => ['/post/index'],'encode'=>false],
+        ['label' => '<span class="glyphicon glyphicon-book f60" aria-hidden="true"></span>&nbsp;PHP', 'url' => ['/post/index','category_id'=>Category::PHP],'encode'=>false],
+        ['label' => '<span class="glyphicon glyphicon-book f60" aria-hidden="true"></span>&nbsp;Python', 'url' => ['/post/index','category_id'=>Category::PYTHON],'encode'=>false],
+    ];
     $menuItems = [
-      
         ['label' => '关于我们', 'url' => ['/site/about']],
         ['label' => '联系我们', 'url' => ['/site/contact']],
     ];
@@ -53,6 +61,11 @@ AppAsset::register($this);
             . Html::endForm()
             . '</li>';
     }
+    echo Nav::widget([
+        'options' => ['class' => 'navbar-nav navbar-left '],
+        'items' => $menuItem,
+    ]);
+
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => $menuItems,
