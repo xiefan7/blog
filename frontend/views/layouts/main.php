@@ -41,7 +41,12 @@ AppAsset::register($this);
     ]);
     $menuItem=[
         ['label' => '<span class="glyphicon glyphicon-book f60" aria-hidden="true"></span>&nbsp;全部', 'url' => ['/post/index'],'encode'=>false],
-        ['label' => '<span class="glyphicon glyphicon-book f60" aria-hidden="true"></span>&nbsp;PHP', 'url' => ['/post/index','category_id'=>Category::PHP],'encode'=>false],
+        ['label' => '<span class="glyphicon glyphicon-book f60" aria-hidden="true"></span>&nbsp;PHP', 'url' => ['/post/index','category_id'=>Category::PHP],'encode'=>false,
+            'items' => [
+        ['label' =>  '<span class="glyphicon glyphicon-book f60" aria-hidden="true"></span>&nbsp;Yii', 'url' =>  ['/post/index','category_id'=>3],'encode'=>false],
+        ],
+            'dropDownOptions'=>['class'=>'nav nav-pills nav-stacked'],
+        ],
         ['label' => '<span class="glyphicon glyphicon-book f60" aria-hidden="true"></span>&nbsp;Python', 'url' => ['/post/index','category_id'=>Category::PYTHON],'encode'=>false],
     ];
     $menuItems = [

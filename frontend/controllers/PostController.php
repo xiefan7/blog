@@ -94,7 +94,6 @@ class PostController extends Controller
     {
     	$tags=Tag::findTagWeights();
     	$recentComments=Comment::findRecentComments();
-    	
         $searchModel = new PostSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 

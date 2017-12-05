@@ -31,7 +31,8 @@ class Category extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name'], 'required'],
+            [['pid', 'name'], 'required'],
+            [['pid'], 'integer'],
             [['name', 'created_at'], 'string', 'max' => 255],
         ];
     }
@@ -43,12 +44,13 @@ class Category extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'pid' => '属于',
             'name' => 'Name',
             'created_at' => 'Created At',
         ];
     }
 
-    /**
+/**
      * @return \yii\db\ActiveQuery
      */
     public function getPosts()
@@ -76,5 +78,28 @@ class Category extends \yii\db\ActiveRecord
         {
             return false;
         }
+    }
+
+    public function getTree()
+    {
+        $rows=self::find()->asArray()->all();
+        $tree=self::Tree($rows,0,0);
+        return $tree;
+
+    }
+
+    public function Tree($rows=[],$pid=0,$level=0)
+    {
+        static $tree=[];
+
+        foreach($rows as $row){
+            if($pid==$row['pid']){
+                $row['level']=$level;
+                $row['names']=str_repeat('　', $row['level']).$row['name'];
+                $tree[]=$row;
+                self::Tree($rows,$row['id'],$level+1);
+            }
+        }
+        return $tree;
     }
 }
