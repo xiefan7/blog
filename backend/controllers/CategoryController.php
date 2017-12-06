@@ -66,6 +66,7 @@ class CategoryController extends Controller
     {
         $model = new Category();
         $tree =$model->getTree();
+        array_unshift($tree, [  'id' =>  '0','names' => '顶级分类']);
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
